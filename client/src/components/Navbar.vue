@@ -125,6 +125,7 @@ export default {
     horizontalNavItems() {
       return [
         { icons: "chat", title: "Post", link: "/posts" },
+        { icons: "chat", title: "Add Post", link: "/post/add" },
         { icons: "lock_open", title: "Sign In", link: "/signin" },
         { icons: "create", title: "Sign Up", link: "/signup" }
       ];

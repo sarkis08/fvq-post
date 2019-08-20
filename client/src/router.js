@@ -29,7 +29,7 @@ export default new Router({
       component: Posts
     },
     {
-      path: '/add-post',
+      path: '/post/add',
       name: 'AddPost',
       component: AddPost
     },
