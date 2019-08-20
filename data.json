@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Post 2",
+    "imageUrl": "http://www.pixperf.com/images/art_sketchbook_concepts_innovative_examples_to_inspire_high_school_trainees.jpg",
+    "categories": ["Blog", "Art"],
+    "description": "Post number two blog"
+  },
+  {
+    "title": "Post 3",
+    "imageUrl": "https://www.theminimalists.com/wp-content/uploads/2019/01/starting-a-blog-in-2019-1024x683.jpg",
+    "categories": ["Blog", "Art"],
+    "description": "Post number three blog"
+  },
+  {
+    "title": "Post 4",
+    "imageUrl": "https://www.theminimalists.com/wp-content/uploads/2019/01/starting-a-blog-in-2019-1024x683.jpg",
+    "categories": ["Blog", "Art"],
+    "description": "Post number four blog"
+  }
+]
