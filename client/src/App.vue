@@ -1,5 +1,12 @@
 <template>
   <v-app class="App">
+    <v-progress-linear
+      :active="loading"
+      :indeterminate="loading"
+      absolute
+      top
+      color="deep-purple accent-4"
+    ></v-progress-linear>
     <Navbar />
     <!--App Content-->
     <main>
@@ -20,6 +27,11 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 export default {
   name: "App",
+  data() {
+    return {
+      loading: false
+    };
+  },
   components: {
     Navbar,
     Footer

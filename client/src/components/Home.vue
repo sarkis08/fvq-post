@@ -4,11 +4,35 @@
     text-xs-center
     v-if="posts"
   >
+    <v-layout row>
+      <v-dialog
+        v-model="loading"
+        persistent
+        fullscreen
+      >
+        <v-container fill-height>
+          <v-layout
+            row
+            justify-center
+            align-center
+          >
+            <v-progress-circular
+              indeterminate
+              :size="50"
+              :width="5"
+              color="primary"
+            ></v-progress-circular>
+          </v-layout>
+        </v-container>
+      </v-dialog>
+    </v-layout>
+
     <v-carousel
       cycle
       height="400"
       hide-delimiter-background
       show-arrows-on-hover
+      v-if="!loading && posts.length > 0"
     >
       <v-carousel-item
         v-for="post in posts"
@@ -23,8 +47,8 @@
 </template>
 
 <script>
-import { gql } from "apollo-boost";
 import { networkInterfaces } from "os";
+import { mapGetters } from "vuex";
 
 export default {
   name: "home",
@@ -32,9 +56,7 @@ export default {
     this.handleCarouselPosts();
   },
   computed: {
-    posts() {
-      return this.$store.getters.posts;
-    }
+    ...mapGetters(["loading", "posts"])
   },
   methods: {
     handleCarouselPosts() {
