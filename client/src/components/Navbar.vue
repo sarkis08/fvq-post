@@ -22,7 +22,7 @@
         </v-toolbar-title>
       </v-toolbar>
 
-      <v-list-item>
+      <v-list-item v-if="this.user">
         <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
         </v-list-item-avatar>
@@ -37,12 +37,12 @@
       <v-list dense>
 
         <v-list-item
-          v-for="item in horizontalNavItems"
+          v-for="item in sideNavItems"
           :key="item.title"
           :to="item.link"
         >
           <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>{{ item.icons }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -86,14 +86,33 @@
 
       <!-- Search Input -->
       <v-text-field
-        flex
-        icon="search"
-        placeholder="Search ..."
-        color="accent"
+        :append-icon-cb="() => {}"
+        placeholder="Search..."
         single-line
+        append-icon="search"
+        color="white"
+        hide-details
       ></v-text-field>
-
       <v-spacer></v-spacer>
+
+      <v-btn
+        text
+        to="/notification"
+        v-if="user"
+      >
+        <v-badge
+          overlap
+          color="warning"
+        >
+          <!-- <span slot="badge">0</span> -->
+          <v-icon
+            large
+            color="white darken-1"
+          >
+            notifications
+          </v-icon>
+        </v-badge>
+      </v-btn>
 
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn
@@ -103,10 +122,27 @@
           :key="item.title"
           :to="item.link"
         >
-          <v-icon left>{{ item.icon }}</v-icon>
+          <v-icon
+            left
+            class="hidden-md-only"
+          >{{ item.icons }}</v-icon>
           {{ item.title }}
         </v-btn>
       </v-toolbar-items>
+
+      <!-- Logout button -->
+      <v-btn
+        text
+        rounded
+        v-if="user"
+        class="warning hidden-xs-only"
+      >
+        <v-icon
+          class="hidden-md-only"
+          left
+        >exit_to_app</v-icon>
+        Logout
+      </v-btn>
     </v-toolbar>
 
   </div>
@@ -114,6 +150,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Navbar",
   data() {
@@ -122,12 +160,40 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["user"]),
+
     horizontalNavItems() {
-      return [
-        { icons: "chat", title: "Post", link: "/posts" },
+      let items = [
         { icons: "lock_open", title: "Sign In", link: "/signin" },
         { icons: "create", title: "Sign Up", link: "/signup" }
       ];
+
+      if (this.user) {
+        items = [
+          { icons: "chat", title: "View Post", link: "/posts" },
+          { icons: "chat", title: "Add Post", link: "/post/add" },
+          { icons: "dashboard", title: "Dashboard", link: "/dashboard" }
+        ];
+      }
+
+      return items;
+    },
+
+    sideNavItems() {
+      let items = [
+        { icons: "lock_open", title: "Sign In", link: "/signin" },
+        { icons: "create", title: "Sign Up", link: "/signup" }
+      ];
+
+      if (this.user) {
+        items = [
+          { icons: "chat", title: "View Post", link: "/posts" },
+          { icons: "chat", title: "Add Post", link: "/post/add" },
+          { icons: "dashboard", title: "Dashboard", link: "/dashboard" }
+        ];
+      }
+
+      return items;
     }
   },
   methods: {

@@ -6,7 +6,7 @@
   "scripts": {
     "server": "nodemon server.js",
     "client": "cd client && npm run serve",
-    "dev": "concurrently --names \"server,client\" \"npm run serve --silent\" \"npm run client --silent\""
+    "dev": "concurrently --names \"server client\" \"npm run server --silent\" \"npm run client --silent\""
   },
   "keywords": [],
   "author": "Reed Barger",
@@ -18,7 +18,8 @@
     "graphql": "^0.13.2",
     "jsonwebtoken": "^8.3.0",
     "md5": "^2.2.1",
-    "mongoose": "^5.2.6"
+    "mongoose": "^5.2.6",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "concurrently": "^3.6.0",

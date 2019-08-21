@@ -4,6 +4,7 @@ import Home from './components/Home.vue'
 
 import AddPost from './components/posts/AddPost'
 import Posts from './components/posts/Posts'
+import Notification from './components/posts/Notification'
 
 import Signin from './components/auth/Signin'
 import Signup from './components/auth/Signup'
@@ -29,9 +30,14 @@ export default new Router({
       component: Posts
     },
     {
-      path: '/add-post',
+      path: '/post/add',
       name: 'AddPost',
       component: AddPost
+    },
+    {
+      path: '/notification',
+      name: 'Notification',
+      component: Notification
     },
     {
       path: '/signin',
