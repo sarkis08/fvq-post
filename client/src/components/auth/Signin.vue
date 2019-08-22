@@ -23,53 +23,65 @@
       <v-flex
         xs12
         sm6
+        lg4
         offset-sm3
+        offset-lg4
       >
-        <v-card
-          color="secondary"
-          dark
-        >
-          <v-container>
-            <v-form @submit.prevent="handleSigninUser">
 
-              <v-layout row>
-                <v-flex xs12>
-                  <v-text-field
-                    v-model="username"
-                    prepend-icon="face"
-                    label="Username"
-                    type="text"
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
+        <flex v-if="error">
+          <form-alert :message="error.message">
+          </form-alert>
+        </flex>
 
-              <v-layout row>
-                <v-flex xs12>
-                  <v-text-field
-                    v-model="password"
-                    prepend-icon="extension"
-                    label="Password"
-                    type="password"
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
+        <v-card class="elevation-12">
+          <v-toolbar
+            color="primary"
+            dark
+            flat
+          >
+            <v-toolbar-title>Signup form</v-toolbar-title>
+            <div class="flex-grow-1"></div>
+          </v-toolbar>
+          <v-card-text>
+            <v-form
+              ref="form"
+              v-model="valid"
+              :lazy-validation="lazy"
+              @submit.prevent="handleSigninUser"
+            >
 
-              <v-layout row>
-                <v-flex xs12>
-                  <v-btn
-                    color="accent"
-                    block
-                    type="submit"
-                  >Signin</v-btn>
-                  <br>
-                  <p>You don't have an account?
-                    <router-link to="/signup">Signup</router-link>
-                  </p>
-                </v-flex>
-              </v-layout>
+              <v-text-field
+                :rules="usernameRules"
+                v-model="username"
+                prepend-icon="person"
+                label="Username"
+                type="text"
+              ></v-text-field>
+
+              <v-text-field
+                :rules="passwordRules"
+                v-model="password"
+                prepend-icon="lock"
+                label="Password"
+                type="password"
+              ></v-text-field>
+              <v-btn
+                :disabled="!valid || loading"
+                :loading="loading"
+                color="accent"
+                block
+                type="submit"
+              >Signin
+                <span class="custom-loader">
+                </span>
+              </v-btn>
+              <br>
+              <p>You don't have an account?
+                <router-link to="/signup">Signup</router-link>
+              </p>
 
             </v-form>
-          </v-container>
+          </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
@@ -83,12 +95,26 @@ export default {
   name: "Signin",
   data() {
     return {
+      lazy: false,
+      valid: true,
       username: "",
-      password: ""
+      password: "",
+
+      usernameRules: [
+        // Check if username empty, min 4 char and max 10 char
+        username => !!username || "Username required!",
+        username => (username || "").length >= 4 || "Min 4 characters",
+        username => (username || "").length <= 10 || "Max 10 characters"
+      ],
+      passwordRules: [
+        password => !!password || "Password required!",
+        password =>
+          (password || "").length >= 6 || "Provide atleast 6 characters"
+      ]
     };
   },
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["user", "error", "loading"])
   },
   watch: {
     user(value) {
@@ -101,11 +127,53 @@ export default {
   },
   methods: {
     handleSigninUser() {
-      this.$store.dispatch("signinUser", {
-        username: this.username,
-        password: this.password
-      });
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch("signinUser", {
+          username: this.username,
+          password: this.password
+        });
+      }
     }
   }
 };
 </script>
+
+<style>
+/** Custom loader **/
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

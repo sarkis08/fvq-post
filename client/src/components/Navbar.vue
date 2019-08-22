@@ -52,14 +52,16 @@
       </v-list>
 
       <!--Logout Button-->
-      <template v-slot:append>
-        <div class="pa-2">
-          <v-btn
-            block
-            class="warning"
-          >Logout</v-btn>
-        </div>
-      </template>
+      <div
+        class="pa-2"
+        v-if="this.user"
+        @click="handleSignoutUser"
+      >
+        <v-btn
+          block
+          class="warning"
+        >Logout</v-btn>
+      </div>
     </v-navigation-drawer>
 
     <v-toolbar
@@ -136,6 +138,7 @@
         rounded
         v-if="user"
         class="warning hidden-xs-only"
+        @click="handleSignoutUser"
       >
         <v-icon
           class="hidden-md-only"
@@ -197,6 +200,10 @@ export default {
     }
   },
   methods: {
+    handleSignoutUser() {
+      this.$store.dispatch("signoutUser");
+    },
+
     toggleSideNav() {
       this.sideNav = !this.sideNav;
     }

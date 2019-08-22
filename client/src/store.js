@@ -12,7 +12,9 @@ export default new Vuex.Store({
   state: {
     posts: [],
     user: null,
-    loading: false
+    loading: false,
+    error: null,
+    authError: null
   },
   mutations: {
     setPosts: (state, payload) => {
@@ -23,7 +25,15 @@ export default new Vuex.Store({
     },
     setLoading: (state, payload) => {
       state.loading = payload;
-    }
+    },
+    setError: (state, payload) => {
+      state.error = payload;
+    },
+    setAuthError: (state, payload) => {
+      state.authError = payload;
+    },
+    clearUser: state => (state.user = null),
+    clearError: state => (state.error = null)
   },
   actions: {
 
@@ -70,12 +80,19 @@ export default new Vuex.Store({
 
     //Signin User
     signinUser: ({ commit }, payload) => {
+      commit('clearError')
+      commit('setLoading', true)
+      // clear token to prevent errors (if malformed)
+      localStorage.setItem('token', '')
+
       apolloClient
         .mutate({
           mutation: SIGNIN_USER,
           variables: payload
         })
         .then(({ data }) => {
+          commit('setLoading', false)
+
           // Saving / storing our taken in the localstorage
           localStorage.setItem("token", data.signinUser.token)
 
@@ -85,15 +102,61 @@ export default new Vuex.Store({
 
         })
         .catch(err => {
+          commit('setLoading', false)
+
+          commit('setError', err);
           console.error(err);
 
         });
+    },
+
+    //Signup User
+    signupUser: ({ commit }, payload) => {
+      commit('clearError')
+      commit('setLoading', true)
+
+      apolloClient
+        .mutate({
+          mutation: SIGNUP_USER,
+          variables: payload
+        })
+        .then(({ data }) => {
+          commit('setLoading', false)
+
+          // Saving / storing our taken in the localstorage
+          localStorage.setItem("token", data.signupUser.token)
+
+          // to make sure created method is run in main.js (we run getCurrentUser), reload the page
+          router.go();
+        })
+        .catch(err => {
+          commit('setLoading', false)
+
+          commit('setError', err);
+          console.error(err);
+
+        });
+    },
+    signoutUser: async ({ commit }) => {
+      // clear user in state
+      commit('clearUser');
+
+      // remove token in localStorage
+      localStorage.setItem('token', '');
+
+      // end session
+      await apolloClient.resetStore();
+
+      // redirect home after user signout 
+      router.push('/')
     }
 
   },
   getters: {
     posts: state => state.posts,
     user: state => state.user,
-    loading: state => state.loading
+    loading: state => state.loading,
+    error: state => state.error,
+    authError: state => state.authError
   }
 })
