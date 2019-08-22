@@ -14,7 +14,7 @@ require('dotenv').config({ path: 'variables.env' });
 
 // Import Mongoose Models
 const User = require('./models/User');
-const Post = require('./models/Post');
+const Blog = require('./models/Blog');
 
 // Connect to Mlab Database
 mongoose
@@ -48,7 +48,7 @@ const server = new ApolloServer({
     context: async ({ req }) => {
         const token = req.headers['authorization'];
 
-        return { User, Post, currentUser: await getUser(token) };
+        return { User, Blog, currentUser: await getUser(token) };
     }
 });
 

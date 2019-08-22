@@ -20,7 +20,7 @@
 
         <v-card class="elevation-12">
           <v-toolbar
-            color="primary"
+            color="cyan accent-4"
             dark
             flat
           >
@@ -110,10 +110,10 @@ export default {
         username => (username || "").length <= 10 || "Max 10 characters"
       ],
       emailRules: [
-        email => !!email || "Required.",
+        email => !!email || "Email required!",
         email => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(email) || "Invalid e-mail.";
+          return pattern.test(email) || "Invalid e-mail!";
         }
       ],
       passwordRules: [

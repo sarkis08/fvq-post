@@ -15,22 +15,45 @@ module.exports = {
 
             const user = await User.findOne({ username: currentUser.username }).populate({
                 path: 'favorites',
-                model: 'Post'
+                model: 'Blog'
             });
             return user;
         },
-        getPosts: async (_, args, { Post }) => {
-            const posts = await Post.find({}).sort({ createdDate: 'desc' })
+        getBlogs: async (_, args, { Blog }) => {
+            const blogs = await Blog.find({}).sort({ createdDate: 'desc' })
                 .populate({
                     path: 'createdBy',
                     model: 'User'
                 });
-            return posts
+            return blogs
+        },
+
+        infiniteScrollBlogs: async (_, { pageNum, pageSize }, { Blog }) => {
+            let blogs;
+
+            if (pageNum === 1) {
+                blogs = await Blog.find({}).sort({ createdBy: 'desc' }).populate({
+                    path: 'createdBy',
+                    model: 'User'
+                }).limit(pageSize)
+            } else {
+                // If page is greater than one, figure out how many documents to skip
+                const skips = pageSize * (pageNum - 1)
+                blogs = await Blog.find({}).sort({ createdBy: 'desc' }).populate({
+                    path: 'createdBy',
+                    model: 'User'
+                }).skip(skips).limit(pageSize)
+            }
+
+            const totalDocs = await Blog.countDocuments();
+            const hasMore = totalDocs > pageSize * pageNum
+
+            return { blogs, hasMore }
         }
     },
     Mutation: {
-        addPost: async (_, { title, imageUrl, categories, description, creatorId }, { Post }) => {
-            const newPost = await new Post({
+        addBlog: async (_, { title, imageUrl, categories, description, creatorId }, { Blog }) => {
+            const newBlog = await new Blog({
                 title,
                 imageUrl,
                 categories,
@@ -38,7 +61,7 @@ module.exports = {
                 createdBy: creatorId
             }).save();
 
-            return newPost;
+            return newBlog;
         },
         signinUser: async (_, { username, password }, { User }) => {
             const user = await User.findOne({ username });

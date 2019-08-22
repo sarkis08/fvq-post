@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
     favorites: {
         type: [mongoose.Schema.Types.ObjectId],
         required: true,
-        ref: 'Post'
+        ref: 'Blog'
     }
 });
 

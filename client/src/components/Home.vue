@@ -2,7 +2,7 @@
 
   <v-container
     text-xs-center
-    v-if="posts"
+    v-if="blogs"
   >
     <v-layout row>
       <v-dialog
@@ -32,14 +32,14 @@
       height="400"
       hide-delimiter-background
       show-arrows-on-hover
-      v-if="!loading && posts.length > 0"
+      v-if="!loading && blogs.length > 0"
     >
       <v-carousel-item
-        v-for="post in posts"
-        :key="post._id"
-        :src="post.imageUrl"
+        v-for="blog in blogs"
+        :key="blog._id"
+        :src="blog.imageUrl"
       >
-        <h2 id="carousel-title">{{post.title}} </h2>
+        <h2 id="carousel-title">{{blog.title}} </h2>
       </v-carousel-item>
     </v-carousel>
   </v-container>
@@ -53,15 +53,15 @@ import { mapGetters } from "vuex";
 export default {
   name: "home",
   created() {
-    this.handleCarouselPosts();
+    this.handleCarouselBlogs();
   },
   computed: {
-    ...mapGetters(["loading", "posts"])
+    ...mapGetters(["loading", "blogs"])
   },
   methods: {
-    handleCarouselPosts() {
-      // reach out Vuex store, fire action that get posts carousel
-      this.$store.dispatch("getPosts");
+    handleCarouselBlogs() {
+      // reach out Vuex store, fire action that get blogs carousel
+      this.$store.dispatch("getBlogs");
     }
   }
 };

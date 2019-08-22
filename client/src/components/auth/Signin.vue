@@ -35,7 +35,7 @@
 
         <v-card class="elevation-12">
           <v-toolbar
-            color="primary"
+            color="cyan accent-4"
             dark
             flat
           >

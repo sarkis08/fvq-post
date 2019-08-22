@@ -4,21 +4,21 @@ import router from './router'
 
 import { client as apolloClient } from './main'
 
-import { GET_POSTS, SIGNIN_USER, SIGNUP_USER, GET_CURRENT_USER } from './queries'
+import { GET_BLOGS, ADD_BLOG, SIGNIN_USER, SIGNUP_USER, GET_CURRENT_USER } from './queries'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    posts: [],
+    blogs: [],
     user: null,
     loading: false,
     error: null,
     authError: null
   },
   mutations: {
-    setPosts: (state, payload) => {
-      state.posts = payload;
+    setBlogs: (state, payload) => {
+      state.blogs = payload;
     },
     setUser: (state, payload) => {
       state.user = payload;
@@ -55,24 +55,64 @@ export default new Vuex.Store({
         });
     },
 
-    getPosts: ({ commit }) => {
+    getBlogs: ({ commit }) => {
       // set loading when true
       commit('setLoading', true)
 
-      // use ApolloClient to fire getPosts query
+      // use ApolloClient to fire getBlogs query
       apolloClient
         .query({
-          query: GET_POSTS
+          query: GET_BLOGS
         }).then(({ data }) => {
           // Get data from actions t state via mutations
           // commit passes daata from actions along to mutation functions
-          commit('setPosts', data.getPosts);
+          commit('setBlogs', data.getBlogs);
 
           commit('setLoading', false);
 
         })
         .catch(err => {
           commit('setLoading', false);
+          console.error(err);
+
+        })
+    },
+
+    addBlog: ({ commit }, payload) => {
+      apolloClient
+        .mutate({
+          mutation: ADD_BLOG,
+          variables: payload,
+
+          update: (caches, { data: { addBlog } }) => {
+            // First read the query you want to update
+            const data = caches.readQuery({ query: GET_BLOGS })
+
+            // Create updated data
+            data.getBlogs.unshift(addBlog);
+
+            //Write updated data back to query
+            caches.writeQuery({
+              query: GET_BLOGS,
+              data
+            })
+
+          },
+          // optimistic response ensures data is added immediately as we specified for the updated function
+          optimisticResponse: {
+            __typename: 'Mutation',
+            addBlog: {
+              __typename: 'Blog',
+              _id: -1,
+              ...payload
+            }
+          }
+        })
+        .then(({ data }) => {
+          console.log(data.addBlog);
+
+        })
+        .catch(err => {
           console.error(err);
 
         })
@@ -153,7 +193,7 @@ export default new Vuex.Store({
 
   },
   getters: {
-    posts: state => state.posts,
+    blogs: state => state.blogs,
     user: state => state.user,
     loading: state => state.loading,
     error: state => state.error,

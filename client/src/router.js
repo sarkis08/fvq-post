@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './components/Home.vue'
 
-import AddPost from './components/posts/AddPost'
-import Posts from './components/posts/Posts'
-import Notification from './components/posts/Notification'
+import AddBlog from './components/blogs/AddBlog'
+import Blogs from './components/blogs/Blogs'
+import Notification from './components/blogs/Notification'
 
 import Signin from './components/auth/Signin'
 import Signup from './components/auth/Signup'
@@ -27,19 +27,25 @@ export default new Router({
       component: Home
     },
     {
-      path: '/posts',
-      name: 'Posts',
-      component: Posts
+      path: '/blogs',
+      name: 'Blogs',
+      component: Blogs,
+      beforeEnter: AuthGuard
+
     },
     {
-      path: '/post/add',
-      name: 'AddPost',
-      component: AddPost
+      path: '/blog/add',
+      name: 'AddBlog',
+      component: AddBlog,
+      beforeEnter: AuthGuard
+
     },
     {
       path: '/notification',
       name: 'Notification',
-      component: Notification
+      component: Notification,
+      beforeEnter: AuthGuard
+
     },
     {
       path: '/signin',

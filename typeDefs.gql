@@ -5,10 +5,10 @@ type User {
   password: String!
   avatar: String
   joinDate: String
-  favorites: [Post]
+  favorites: [Blog]
 }
 
-type Post {
+type Blog {
   _id: ID
   title: String!
   imageUrl: String!
@@ -31,19 +31,25 @@ type Token {
   token: String!
 }
 
+type BlogPage {
+  blogs: [Blog]
+  hasMore: Boolean
+}
+
 type Query {
   getCurrentUser: User
-  getPosts: [Post]
+  getBlogs: [Blog]
+  infiniteScrollBlogs(pageNum: Int!, pageSize: Int!): BlogPage
 }
 
 type Mutation {
-  addPost(
+  addBlog(
     title: String!
     imageUrl: String!
     categories: [String]!
     description: String!
     creatorId: ID!
-  ): Post!
+  ): Blog!
   signinUser(username: String!, password: String!): Token
   signupUser(username: String!, email: String!, password: String!): Token
 }

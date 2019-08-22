@@ -1,11 +1,11 @@
 import { gql } from 'apollo-boost'
 
-/* Posts Queries */
+/* Blogs Queries */
 
-export const GET_POSTS = gql`
+export const GET_BLOGS = gql`
 
 query {
-  getPosts {
+  getBlogs {
     _id
     title
     imageUrl
@@ -34,7 +34,57 @@ export const GET_CURRENT_USER = gql`
 
 `;
 
-/**Posts Mutations */
+export const INFINITE_SCROLL_BLOGS = gql`
+  query ($pageNum: Int!, $pageSize: Int!) {
+    infiniteScrollBlogs(pageNum: $pageNum, pageSize: $pageSize) {
+      hasMore
+      blogs {
+        _id
+        title
+        imageUrl
+        categories
+        description
+        likes
+        createdDate
+        messages {
+          _id
+        }
+        createdBy {
+          _id
+          username
+          avatar
+        }
+      }
+    }
+  }
+
+`;
+
+/**Blogs Mutations */
+export const ADD_BLOG = gql`
+mutation (
+  $title: String!,
+  $imageUrl: String!,
+  $categories: [String]!,
+  $description: String!,
+  $createdId: ID!
+) {
+  addBlog(
+    creatorId: $createdId, 
+    title: $title,
+    imageUrl: $imageUrl,
+  categories: $categories,
+  description: $description) {
+    _id
+    title
+    imageUrl
+    categories
+    description
+
+  }
+}
+
+`;
 
 /**User Mutations */
 export const SIGNIN_USER = gql`

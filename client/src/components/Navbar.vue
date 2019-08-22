@@ -173,8 +173,8 @@ export default {
 
       if (this.user) {
         items = [
-          { icons: "chat", title: "View Post", link: "/posts" },
-          { icons: "chat", title: "Add Post", link: "/post/add" },
+          { icons: "chat", title: "View Blogs", link: "/blogs" },
+          { icons: "chat", title: "Add Blog", link: "/blog/add" },
           { icons: "dashboard", title: "Dashboard", link: "/dashboard" }
         ];
       }
@@ -190,8 +190,8 @@ export default {
 
       if (this.user) {
         items = [
-          { icons: "chat", title: "View Post", link: "/posts" },
-          { icons: "chat", title: "Add Post", link: "/post/add" },
+          { icons: "chat", title: "View Blog", link: "/blogs" },
+          { icons: "chat", title: "Create Blog", link: "/blog/add" },
           { icons: "dashboard", title: "Dashboard", link: "/dashboard" }
         ];
       }
