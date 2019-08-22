@@ -8,6 +8,11 @@ import vuetify from './plugins/vuetify'
 import ApolloClient from 'apollo-boost'
 import VueApollo from 'vue-apollo'
 
+import FormAlert from './components/shared/FormAlert'
+
+// Register Global Component
+Vue.component('form-alert', FormAlert)
+
 Vue.use(VueApollo)
 
 // Setup ApolloCleint
@@ -41,6 +46,14 @@ export const client = new ApolloClient({
     if (graphQLErrors) {
       for (let err of graphQLErrors) {
         console.dir(err);
+
+        if (err.name === "AuthenticationError") {
+          // set auth error in state (to show in snackbar)
+          store.commit('setAuthError', err)
+
+          // signout user (to clear token)
+          store.dispatch('signoutUser')
+        }
       }
     }
   }

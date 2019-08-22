@@ -11,6 +11,8 @@ import Signup from './components/auth/Signup'
 import Dashboard from './components/auth/Dashboard'
 import Profile from './components/auth/Profile'
 
+import AuthGuard from './AuthGuard'
+
 import Default from './components/Default'
 
 Vue.use(Router)
@@ -54,7 +56,8 @@ export default new Router({
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: Dashboard
+      component: Dashboard,
+      beforeEnter: AuthGuard
 
     },
     {
