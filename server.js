@@ -16,6 +16,8 @@ require('dotenv').config({ path: 'variables.env' });
 const User = require('./models/User');
 const Blog = require('./models/Blog');
 
+mongoose.set('useFindAndModify', false);
+
 // Connect to Mlab Database
 mongoose
     .connect(process.env.MONGO_URL, { useNewUrlParser: true })

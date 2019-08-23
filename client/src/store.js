@@ -84,15 +84,15 @@ export default new Vuex.Store({
           mutation: ADD_BLOG,
           variables: payload,
 
-          update: (caches, { data: { addBlog } }) => {
+          update: (cache, { data: { addBlog } }) => {
             // First read the query you want to update
-            const data = caches.readQuery({ query: GET_BLOGS })
+            const data = cache.readQuery({ query: GET_BLOGS })
 
             // Create updated data
             data.getBlogs.unshift(addBlog);
 
             //Write updated data back to query
-            caches.writeQuery({
+            cache.writeQuery({
               query: GET_BLOGS,
               data
             })

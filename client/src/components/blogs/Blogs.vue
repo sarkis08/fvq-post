@@ -1,20 +1,100 @@
 <template>
-  <v-container v-if="infiniteScrollBlogs">
-    <div
-      v-for="blog in infiniteScrollBlogs.blogs"
-      :key="blog._id"
+  <v-container
+    fluid
+    grid-list-md
+  >
+
+    <!-- Blog Cards -->
+    <v-layout
+      row
+      wrap
+      v-if="infiniteScrollBlogs"
     >
-      <img
-        :src="blog.imageUrl"
-        alt=""
-        height="100px"
+      <v-flex
+        xs12
+        sm6
+        v-for="blog in infiniteScrollBlogs.blogs"
+        :key="blog._id"
       >
-      <h3>{{ blog.title }}</h3>
-    </div>
-    <v-btn
-      @click="showMoreBlogs"
+        <v-card hover>
+          <v-img
+            :src="blog.imageUrl"
+            height="30vh"
+            lazy
+            @click.native="gotToBlog(blog._id)"
+          ></v-img>
+
+          <v-card-title>
+            <div>{{blog.title}}</div>
+
+          </v-card-title>
+
+          <v-card-actions>
+            &nbsp;&nbsp;<span class="grey--text subtitle-1">{{blog.likes}} likes - {{blog.messages.length}} comment(s)</span>
+            <div class="flex-grow-1"></div>
+            <v-btn
+              icon
+              @click="show = !show"
+            >
+              <v-icon>{{ show ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
+            </v-btn>
+          </v-card-actions>
+
+          <!-- Blog Creator -->
+
+          <v-slide-y-transition>
+            <v-list-item
+              class="gray
+              dark-1"
+              v-show="show"
+            >
+              <v-list-item-avatar>
+                <v-img
+                  class="elevation-6"
+                  :src="blog.createdBy.avatar"
+                ></v-img>
+              </v-list-item-avatar>
+
+              <v-list-item-content>
+                <v-list-item-title class="primary--text">{{blog.createdBy.username}}</v-list-item-title>
+                <v-list-item-subtitle class="font-weight-thin">Added {{blog.createdDate}}</v-list-item-subtitle>
+              </v-list-item-content>
+
+              <v-row
+                justify="end"
+                align="center"
+              >
+                <v-btn
+                  icon
+                  ripple
+                >
+                  <v-icon color="grey lighten-1">info</v-icon>
+                </v-btn>
+              </v-row>
+            </v-list-item>
+          </v-slide-y-transition>
+        </v-card>
+      </v-flex>
+    </v-layout>
+
+    <!-- Fetch More Button -->
+    <v-layout
       v-if="showMoreEnabled"
-    >Fetch More</v-btn>
+      column
+    >
+      <v-flex xs12>
+        <v-layout
+          justify-center
+          row
+        >
+          <v-btn
+            color="info"
+            @click="showMoreBlogs"
+          >Fetch More</v-btn>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+
   </v-container>
 </template>
 
@@ -27,6 +107,7 @@ export default {
   name: "Blogs",
   data() {
     return {
+      show: false,
       pageNum: 1,
       showMoreEnabled: true
     };
@@ -69,6 +150,9 @@ export default {
           };
         }
       });
+    },
+    gotToBlog(blogId) {
+      this.$router.push(`/blog/${blogId}`);
     }
   }
 };

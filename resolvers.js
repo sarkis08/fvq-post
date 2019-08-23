@@ -28,6 +28,14 @@ module.exports = {
             return blogs
         },
 
+        getBlog: async (_, { blogId }, { Blog }) => {
+            const blog = await Blog.findOne({ _id: blogId }).populate({
+                path: 'messages.messageUser',
+                model: 'User'
+            })
+            return blog
+        },
+
         infiniteScrollBlogs: async (_, { pageNum, pageSize }, { Blog }) => {
             let blogs;
 
@@ -62,6 +70,28 @@ module.exports = {
             }).save();
 
             return newBlog;
+        },
+        addBlogMessage: async (_, { messageBody, userId, blogId }, { Blog }) => {
+            const newMessage = {
+                messageBody,
+                messageUser: userId
+            }
+
+            const blog = await Blog.findOneAndUpdate(
+                // find blog by id
+                { _id: blogId },
+
+                // prepend (push) new message to beginning of the messages array
+                { $push: { messages: { $each: [newMessage], $position: 0 } } },
+
+                // return fresh document after update
+                { new: true }
+            ).populate({
+                path: 'message.messageUser',
+                model: 'User'
+            })
+
+            return blog.messages[0]
         },
         signinUser: async (_, { username, password }, { User }) => {
             const user = await User.findOne({ username });

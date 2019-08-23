@@ -35,9 +35,11 @@
       v-if="!loading && blogs.length > 0"
     >
       <v-carousel-item
+        style="cursor: pointer"
         v-for="blog in blogs"
         :key="blog._id"
         :src="blog.imageUrl"
+        @click.native="gotToBlog(blog._id)"
       >
         <h2 id="carousel-title">{{blog.title}} </h2>
       </v-carousel-item>
@@ -62,6 +64,9 @@ export default {
     handleCarouselBlogs() {
       // reach out Vuex store, fire action that get blogs carousel
       this.$store.dispatch("getBlogs");
+    },
+    gotToBlog(blogId) {
+      this.$router.push(`/blog/${blogId}`);
     }
   }
 };

@@ -39,6 +39,7 @@ type BlogPage {
 type Query {
   getCurrentUser: User
   getBlogs: [Blog]
+  getBlog(blogId: ID!): Blog!
   infiniteScrollBlogs(pageNum: Int!, pageSize: Int!): BlogPage
 }
 
@@ -50,6 +51,7 @@ type Mutation {
     description: String!
     creatorId: ID!
   ): Blog!
+  addBlogMessage(messageBody: String!, userId: ID!, blogId: ID!): Message!
   signinUser(username: String!, password: String!): Token
   signupUser(username: String!, email: String!, password: String!): Token
 }
