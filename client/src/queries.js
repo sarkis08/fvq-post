@@ -14,6 +14,37 @@ query {
 
 `;
 
+export const GET_BLOG = gql`
+  query($blogId: ID!) {
+    getBlog(blogId: $blogId) {
+      _id
+      title
+      imageUrl
+      categories
+      description
+      likes
+      createdDate
+      createdBy {
+        _id
+        avatar
+      }
+      messages {
+        _id
+        messageBody
+        messageDate
+        messageUser {
+          _id
+          username
+          avatar
+        }
+      }
+    }
+  }
+
+`;
+
+
+
 /**Users Queries */
 export const GET_CURRENT_USER = gql`
   query {
@@ -83,6 +114,21 @@ mutation (
 
   }
 }
+
+`;
+
+export const ADD_BLOG_MESSAGE = gql`
+  mutation($messageBody: String!, $userId: ID!, $blogId: ID!) {
+    addBlogMessage(messageBody: $messageBody, userId: $userId, blogId: $blogId) {
+      _id
+      messageBody
+      messageDate
+      messageUser {
+        _id
+        avatar
+      }
+    }
+  }
 
 `;
 

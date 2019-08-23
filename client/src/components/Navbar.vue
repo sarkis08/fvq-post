@@ -98,7 +98,8 @@
       <v-spacer></v-spacer>
 
       <v-btn
-        text
+        icon
+        ripple
         to="/notification"
         v-if="user"
       >
@@ -167,6 +168,7 @@ export default {
 
     horizontalNavItems() {
       let items = [
+        { icons: "chat", title: "View Blogs", link: "/blogs" },
         { icons: "lock_open", title: "Sign In", link: "/signin" },
         { icons: "create", title: "Sign Up", link: "/signup" }
       ];
@@ -184,13 +186,14 @@ export default {
 
     sideNavItems() {
       let items = [
+        { icons: "chat", title: "View Blog", link: "/blogs" },
         { icons: "lock_open", title: "Sign In", link: "/signin" },
         { icons: "create", title: "Sign Up", link: "/signup" }
       ];
 
       if (this.user) {
         items = [
-          { icons: "chat", title: "View Blog", link: "/blogs" },
+          { icons: "chat", title: "View Blogs", link: "/blogs" },
           { icons: "chat", title: "Create Blog", link: "/blog/add" },
           { icons: "dashboard", title: "Dashboard", link: "/dashboard" }
         ];

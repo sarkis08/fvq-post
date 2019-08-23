@@ -76,8 +76,6 @@
             type="submit"
           >submit</v-btn>
 
-          <v-btn @click="clear">clear</v-btn>
-
         </v-form>
       </v-flex>
     </v-layout>
@@ -125,14 +123,6 @@ export default {
 
         this.$router.push("/");
       }
-    },
-
-    clear() {
-      this.$v.$reset();
-      this.title = "";
-      this.imageUrl = "";
-      this.categories = [];
-      this.desc = "";
     }
   }
 };

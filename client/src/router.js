@@ -4,6 +4,7 @@ import Home from './components/Home.vue'
 
 import AddBlog from './components/blogs/AddBlog'
 import Blogs from './components/blogs/Blogs'
+import Blog from './components/blogs/Blog'
 import Notification from './components/blogs/Notification'
 
 import Signin from './components/auth/Signin'
@@ -29,15 +30,22 @@ export default new Router({
     {
       path: '/blogs',
       name: 'Blogs',
-      component: Blogs,
-      beforeEnter: AuthGuard
+      component: Blogs
 
     },
+
     {
       path: '/blog/add',
       name: 'AddBlog',
       component: AddBlog,
       beforeEnter: AuthGuard
+
+    },
+    {
+      path: '/blog/:blogId',
+      name: 'Blog',
+      component: Blog,
+      props: true
 
     },
     {
